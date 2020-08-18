@@ -17,8 +17,8 @@ public class BatchTask implements Task{
   // for logging
   private static final LOGGER log = new LOGGER(BatchTask.class.getSimpleName(), false);
 
-  private LinkedBlockingQueue<Task> tasks = null;
-  private int maxSize = 0;
+  private final LinkedBlockingQueue<Task> tasks;
+  private final int maxSize;
 
   public BatchTask(int maxSize) {
     this.maxSize = maxSize;

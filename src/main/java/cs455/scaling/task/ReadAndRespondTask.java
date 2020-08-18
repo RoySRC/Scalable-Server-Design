@@ -22,9 +22,9 @@ public class ReadAndRespondTask implements Task {
   // for logging
   private static final transient LOGGER log = new LOGGER(ReadAndRespondTask.class.getSimpleName(), false);
 
-  private SelectionKey selectionKey = null;
-  private SocketChannel client = null;
-  private ConcurrentHashMap<String, ServerStatistics> registeredClients = null;
+  private final SelectionKey selectionKey;
+  private final SocketChannel client;
+  private final ConcurrentHashMap<String, ServerStatistics> registeredClients;
 
   /**
    * Constructor

@@ -23,10 +23,10 @@ public class ClientRegistrationTask implements Task {
   // for logging
   private static final transient LOGGER log = new LOGGER(ClientRegistrationTask.class.getSimpleName(), false);
 
-  private SelectionKey selectionKey = null;
-  private Selector selector = null;
-  private ServerSocketChannel serverSocketChannel = null;
-  private ConcurrentHashMap<String, ServerStatistics> registeredClients = null;
+  private final SelectionKey selectionKey;
+  private final Selector selector;
+  private final ServerSocketChannel serverSocketChannel;
+  private final ConcurrentHashMap<String, ServerStatistics> registeredClients;
 
   /**
    * Constructor

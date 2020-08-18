@@ -22,11 +22,11 @@ public class BatchTaskManager {
   private static final LOGGER log = new LOGGER(BatchTaskManager.class.getSimpleName(), false);
 
   private BatchTask batchTask;
-  private ThreadPool threadPool = null;
+  private final ThreadPool threadPool;
   private boolean _kill_ = false;
-  private long timeout = 0; // in milliseconds
-  private ReentrantLock lock = new ReentrantLock();
-  private LinkedBlockingQueue<Task> taskQueue;
+  private final long timeout; // in milliseconds
+  private final ReentrantLock lock = new ReentrantLock();
+  private final LinkedBlockingQueue<Task> taskQueue;
   private Thread[] threads;
 
   /**
