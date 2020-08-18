@@ -80,12 +80,12 @@ client Throughput: p messages/s, Std. Dev. Of Per-client Throughput: q messages/
 
 ***
 **NOTE:**
-These statistics are used to evaluate correctness.
+*These statistics are used to evaluate correctness.
 If the server is functioning correctly, the server throughput
 should remain approximately constant throughout its operation. Note that it takes some time to
 reach a stable value due to initialization overheads at both server and client ends. Mean per-client
 throughput multiplied by the number of active connections is approximately equal to the sever
-throughput.
+throughput.*
 ***
 
 Similarly, once every 20 seconds after starting up, every client prints the number of messages it
