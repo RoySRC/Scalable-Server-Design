@@ -66,7 +66,6 @@ public class BatchTaskManager {
 
   /**
    * Returns a boolean that indicates whether or the thread should stay alive
-   *
    * @return boolean indicating whether or not the thread should stay alive
    */
   private boolean stayAlive() {
@@ -124,6 +123,11 @@ public class BatchTaskManager {
     threads[1] = taskAdder;
   }
 
+  /**
+   * Add a task to the task queue
+   * @param t a class implementing the Task interface
+   * @throws InterruptedException
+   */
   public void addTask(Task t) throws InterruptedException {
     this.taskQueue.put(t);
   }
@@ -159,9 +163,11 @@ public class BatchTaskManager {
   }
 
   /**
-   * This is the timer thread. This thread is responsible for ensuring that batches get delivered to the thread pool
-   * no later than the expiration time of the batch. The batch expiration timeout is determined by the specified
-   * @timeout parameter when creating an instance of the @{@link BatchTaskManager} class.
+   * Get the number of tasks in the current batch task
+   * @return integer representing the number of tasks in the current batch task
    */
+  public int size() {
+    return batchTask.size();
+  }
 
 }
