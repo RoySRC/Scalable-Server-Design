@@ -27,32 +27,32 @@ public class ClientNode {
   /**
    * The host address of where the server is located
    */
-  private String server_host = null;
+  private final String server_host;
 
   /**
    * The host port of where the server is located
    */
-  private int server_port = 0;
+  private final int server_port;
 
   /**
    * The number of messages to send to the server per second
    */
-  private int message_rate = 0;
+  private final int message_rate;
 
   /**
    * A linked list containing the SHA1 message digests of the messages sent to the server
    */
-  private LinkedList<String> messageDigests = null;
+  private final LinkedList<String> messageDigests;
 
   /**
    * Byte buffer to receive the messages sent from the server
    */
-  private ByteBuffer receiveBuffer;
+  private final ByteBuffer receiveBuffer;
 
   /**
    * Used to store the number of sent and received messages
    */
-  private ClientStatistics counter;
+  private final ClientStatistics counter;
 
   /**
    * Socket channel for connection to server
@@ -271,7 +271,7 @@ public class ClientNode {
    */
   private synchronized void removeFromMessageDigest(String message) throws Exception {
     boolean returnValue = this.messageDigests.remove(message);
-    if (returnValue == true) {
+    if (returnValue) {
       log.info("Successfully removed message: "+message);
     } else {
       log.error("Linked list does not contain message: "+message);
