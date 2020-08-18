@@ -14,12 +14,12 @@ manage all tasks relating to network communications. This includes:
 
 This assignment uses Java NIO for communication to the server.
 
-##Components
+## Components
 There are two components that we need for this project: 
 * Server
 * Client
 
-###Server Node
+### Server Node
 There is exactly one server node in the system. The server node provides the following functions:
 * Accepts incoming network connections from the clients.
 * Accepts incoming traffic from these connections
@@ -27,7 +27,7 @@ There is exactly one server node in the system. The server node provides the fol
 * Replies to clients by sending back a hash code for each message received.
 * The server performs functions A, B, C, and D by relying on the thread pool.
 
-####Client Nodes
+#### Client Nodes
 Unlike the server node, there are multiple Clients (minimum of 100) in the system. 
 The client provides the following functionalities:
 * Connect and maintain an active connection to the server.
@@ -38,7 +38,7 @@ generate packets is R per-second. The typical value of R is between 2-4.
 acknowledges every packet that it has received by sending the computed hash code back to
 the client.
 
-##Interactions between the components
+## Interactions between the components
 The client sends messages at the rate specified during start-up. The client sends a `byte[]`
 to the server. The size of this array is 8 KB and the contents of this array are randomly generated. The
 client generates a new byte array for every transmission and tracks the hash codes associated with
@@ -93,7 +93,7 @@ has sent and received during the last 20 seconds. This log message looks similar
 
 **[timestamp] Total Sent Count: x, Total Received Count: y**
 
-##Command line arguments for the two components
+## Command line arguments for the two components
 Classes are organized in a package called cs455.scaling. The command-line arguments
 and the order in which they should be specified for the Server and the Client are listed below:
 
