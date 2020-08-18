@@ -52,7 +52,7 @@ public class ReadAndRespondTask implements Task {
   public void execute() {
     try {
       // Create a buffer to read into
-      ByteBuffer buffer = ByteBuffer.allocate(Protocol.MESSAGE_SIZE);
+      ByteBuffer buffer = ByteBuffer.allocate(Protocol.MESSAGE_SIZE.getValue());
 
       //https://stackoverflow.com/questions/11854382/how-correctly-close-socketchannel-in-java-nio
       // Read from it

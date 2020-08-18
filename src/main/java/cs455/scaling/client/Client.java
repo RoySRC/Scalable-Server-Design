@@ -17,7 +17,7 @@ public class Client {
     // Create the client node
     ClientNode clientNode = new ClientNode(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 
-    log.info("Messaging rate: "+clientNode.getMessageRate());
+    log.info("Messaging rate: " + clientNode.getMessageRate());
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       try {

@@ -66,8 +66,9 @@ public class ClientNode {
 
   /**
    * Constructor
-   * @param server_host The host where the server is running
-   * @param server_port the port on the host where the server is running
+   *
+   * @param server_host  The host where the server is running
+   * @param server_port  the port on the host where the server is running
    * @param message_rate The rate at which to send messages to the server
    */
   public ClientNode(String server_host, int server_port, int message_rate) {
@@ -75,12 +76,13 @@ public class ClientNode {
     this.server_port = server_port;
     this.message_rate = message_rate;
     this.messageDigests = new LinkedList<>();
-    this.receiveBuffer = ByteBuffer.allocate(Protocol.SERVER_RESPONSE_MESSAGE_SIZE);
+    this.receiveBuffer = ByteBuffer.allocate(Protocol.SERVER_RESPONSE_MESSAGE_SIZE.getValue());
     this.counter = new ClientStatistics();
   }
 
   /**
    * Get the message rate
+   *
    * @return the number of messages to be sent to the server per second
    */
   public int getMessageRate() {
@@ -89,6 +91,7 @@ public class ClientNode {
 
   /**
    * Get the socket channel
+   *
    * @return the socket channel corresponding to the server connection
    */
   public SocketChannel getServerConnection() {
@@ -104,16 +107,17 @@ public class ClientNode {
         synchronized (this.counter) {
           System.out.println(
               String.format("[%d] Total Sent Count: %d, Total Received Count: %d",
-                  Util.getTimestamp(), this.counter.getTotalSentCount(), this.counter.getTotalReceiveCount())
+                  Util.getTimestamp(), this.counter.getTotalSentCount(),
+                  this.counter.getTotalReceiveCount())
           );
           this.counter.resetCounters();
           if (log.getLogStatus())
-            System.out.println(log.PURPLE("size of linked list: "+this.messageDigests.size()));
+            System.out.println(log.PURPLE("size of linked list: " + this.messageDigests.size()));
         }
         System.out.flush();
 
         try {
-          Thread.sleep(20*1000);
+          Thread.sleep(20 * 1000);
         } catch (InterruptedException e) {
           log.printStackTrace(e);
         }
@@ -128,15 +132,15 @@ public class ClientNode {
    * so that it can listen for activity of interest - OP_READ - in the receiver thread.
    */
   public void connectToServer() {
-    log.info("Connecting to server at "+server_host+":"+server_port);
+    log.info("Connecting to server at " + server_host + ":" + server_port);
     try {
       selector = Selector.open(); // open a selector to listen for activity on SocketChannel
 
       // Open the SocketChannel
       serverConnection = SocketChannel.open(new InetSocketAddress(server_host, server_port));
       serverConnection.configureBlocking(false);
-      log.info((serverConnection==null)?"serverConnection is null":"serverConnection is not null");
-      log.info("Connected to server "+ Util.getRemoteAddressPortPair(serverConnection.socket()));
+      log.info((serverConnection == null) ? "serverConnection is null" : "serverConnection is not null");
+      log.info("Connected to server " + Util.getRemoteAddressPortPair(serverConnection.socket()));
 
       // Register the serverConnection SocketChannel with the selector
       serverConnection.register(selector, SelectionKey.OP_READ);
@@ -149,6 +153,7 @@ public class ClientNode {
 
   /**
    * Close the connection to the server
+   *
    * @throws IOException
    */
   public void closeServerConnection() throws IOException {
@@ -202,11 +207,11 @@ public class ClientNode {
         if (key.isReadable()) {
           int bytesRead = Util.readFromChannel(this.receiveBuffer, this.serverConnection);
           if (bytesRead == -1) {
-            log.error("Bytes Read: "+bytesRead);
+            log.error("Bytes Read: " + bytesRead);
             continue;
           }
           String response = new String(this.receiveBuffer.array()).trim();
-          log.info("Received response: "+response);
+          log.info("Received response: " + response);
           this.removeFromMessageDigest(response);
           this.counter.incrementReceiveCount();
 
@@ -218,7 +223,7 @@ public class ClientNode {
 
     } catch (Exception e) {
       log.error("Server returned an element not in linked list.");
-      log.error("Dumping linked list contents: "+this.messageDigests.toString());
+      log.error("Dumping linked list contents: " + this.messageDigests.toString());
       log.printStackTrace(e);
     }
   }
@@ -227,11 +232,13 @@ public class ClientNode {
    * The following function is responsible for generating and sending random Protocol.MESSAGE_SIZE KB size messages to
    * the server. After this message has been sent to the server, it computes the SHA1 hash of the message and adds it
    * to the linked list data structure of message digests to keep track of messages sent to the server.
+   *
    * @throws IOException
    */
   public void sendMessage() throws IOException {
     try {
-      byte[] message = Util.randByteArray(Protocol.MESSAGE_SIZE); // generate a random byte array
+      // generate a random byte array
+      byte[] message = Util.randByteArray(Protocol.MESSAGE_SIZE.getValue());
 
       // Compute the hash and put into messageDigests linked list
       String messageDigest = String.format("%40s", Util.SHA1FromBytes(message)).replace(" ", "-");
@@ -241,7 +248,7 @@ public class ClientNode {
       // Send the message to the server
       log.info("Sending message to server.");
       int bytesWritten = Util.writeToChannel(serverConnection, message);
-      log.info("bytesWritten: "+bytesWritten);
+      log.info("bytesWritten: " + bytesWritten);
       log.info("Message sent to server.");
 
     } catch (IOException e) {
@@ -254,32 +261,34 @@ public class ClientNode {
 
   /**
    * The following function adds a message digest to the linked list of message digests.
+   *
    * @param message
    */
   private synchronized void addToMessageDigest(String message) {
     this.messageDigests.add(message);
-    log.info("Added "+message+" to linked list.");
+    log.info("Added " + message + " to linked list.");
   }
 
   /**
    * Adapted from:
-   *    https://www.geeksforgeeks.org/linkedlist-remove-method-in-java/
+   * https://www.geeksforgeeks.org/linkedlist-remove-method-in-java/
    * <p></p>
    * The following function removes a message digest from the linked list of message digests. If the message digest
    * is not in the linked list, it throws an exception with the message "Linked list does not contain <message-digest>"
+   *
    * @param message The message digest to be removed
    */
   private synchronized void removeFromMessageDigest(String message) throws Exception {
     boolean returnValue = this.messageDigests.remove(message);
     if (returnValue) {
-      log.info("Successfully removed message: "+message);
+      log.info("Successfully removed message: " + message);
     } else {
-      log.error("Linked list does not contain message: "+message);
-      log.error("Dumping linked list content: "+messageDigests.toString());
+      log.error("Linked list does not contain message: " + message);
+      log.error("Dumping linked list content: " + messageDigests.toString());
       if (log.getLogStatus()) {
         System.exit(-1);
       }
-      throw new Exception("Linked list does not contain message: "+message);
+      throw new Exception("Linked list does not contain message: " + message);
 
     }
   }
